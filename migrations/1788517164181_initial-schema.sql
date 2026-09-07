@@ -1,0 +1,35 @@
+-- Up Migration
+
+-- 1. Create Categories table
+CREATE TABLE categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. Create Users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'MEMBER',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. Create Books table 
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
+    owner_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    isbn VARCHAR(20) NOT NULL UNIQUE,
+    status VARCHAR(50) NOT NULL DEFAULT 'AVAILABLE',
+    pages INTEGER NOT NULL CHECK (pages > 0),
+    summary TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+)
+
+-- Down Migration
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS categories;

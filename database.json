@@ -1,0 +1,5 @@
+{
+  "dev": {
+    "connectionString": "postgres://library_user:library_secret@localhost:5433/library_db"
+  }
+}
